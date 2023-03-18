@@ -1,4 +1,12 @@
 <resources>
   <string name="app_name">BlurPerformanceTester</string>
   <string name="hello_world">Hello World!</string>
+  <string name="compose">Compose</string>
+  <string name="ui_toolkit">UI Toolkit</string>
+  <string name="coil">coil</string>
+  <string name="image_loader">Image Loader</string>
+  <string name="run">Run</string>
+  <string name="complete">Complete</string>
+  <string name="processing">Processing</string>
+  <string name="output">Output</string>
 </resources>
