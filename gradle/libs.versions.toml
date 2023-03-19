@@ -13,6 +13,8 @@ androidx-uiTooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-composeMaterial3 = { module = "androidx.compose.material3:material3" }
 androidx-lifecycleViewmodelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 androidx-profileinstaller = "androidx.profileinstaller:profileinstaller:1.2.2"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
+androidx-lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
 
 material = "com.google.android.material:material:1.8.0"
 
