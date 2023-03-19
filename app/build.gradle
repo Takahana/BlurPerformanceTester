@@ -62,6 +62,7 @@ dependencies {
   implementation libs.androidx.fragment
   implementation libs.androidx.lifecycleRuntime
   implementation libs.blurry
+  implementation libs.realtimeblurview
   testImplementation libs.junit
   androidTestImplementation libs.androidx.junit
   androidTestImplementation libs.androidx.espresso
