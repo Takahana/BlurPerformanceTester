@@ -155,4 +155,27 @@ class BlurBenchmark {
 
     device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
   }
+
+  @Test
+  fun androidViewBlurKitBlur() = benchmarkRule.measureRepeated(
+    packageName = "tech.takahana.blurperformancetester",
+    metrics = listOf(FrameTimingMetric()),
+    iterations = 5,
+    startupMode = StartupMode.COLD,
+    setupBlock = {
+      pressHome()
+      startActivityAndWait()
+
+      val composeButton = device.findObject(By.text("AndroidView"))
+      composeButton.click()
+
+      val glideButton = device.findObject(By.text("BlurKit"))
+      glideButton.click()
+    }
+  ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
+    device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
+  }
 }
