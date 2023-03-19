@@ -2,8 +2,8 @@ package tech.takahana.blurperformancetester.components.compose
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,34 +13,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import tech.takahana.blurperformancetester.R
 
 @Composable
-fun LabelCheckbox(
+fun LabelRadioButton(
   modifier: Modifier = Modifier,
   label: @Composable () -> Unit,
-  checked: Boolean,
-  onCheckedChange: ((Boolean) -> Unit)?,
+  selected: Boolean,
+  onClick: (() -> Unit)?,
 ) {
   Row(
     modifier = modifier
-      .clickable(enabled = onCheckedChange != null) {
-        onCheckedChange?.invoke(!checked)
+      .clickable(enabled = onClick != null) {
+        onClick?.invoke()
       },
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+    RadioButton(
+      selected = selected,
+      onClick = { onClick?.invoke() }
+    )
     label()
   }
 }
 
 @Preview
 @Composable
-fun LabelCheckboxPreview() {
+fun LabelRadioButtonPreview() {
   MaterialTheme {
-    LabelCheckbox(
+    LabelRadioButton(
       label = {
         Text(text = stringResource(id = R.string.app_name))
       },
-      checked = true,
-      onCheckedChange = null,
+      selected = true,
+      onClick = null,
     )
   }
 }

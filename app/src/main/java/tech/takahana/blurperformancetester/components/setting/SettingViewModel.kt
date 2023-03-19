@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
 
 class SettingViewModel : ViewModel() {
 
@@ -13,5 +15,14 @@ class SettingViewModel : ViewModel() {
 
   init {
     mutableUiState.value = SettingScreenUiState.Display.Compose.default
+  }
+
+  fun onSelectComposeImageLoader(loader: ComposeImageLoader) {
+    mutableUiState.update {
+      when (it) {
+        SettingScreenUiState.Initialized -> it
+        is SettingScreenUiState.Display.Compose -> it.copy(selectedImageLoader = loader)
+      }
+    }
   }
 }

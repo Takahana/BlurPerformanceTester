@@ -24,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.takahana.blurperformancetester.R
 import tech.takahana.blurperformancetester.components.Navigator
 import tech.takahana.blurperformancetester.components.Navigator.Screen
-import tech.takahana.blurperformancetester.components.compose.LabelCheckbox
+import tech.takahana.blurperformancetester.components.compose.LabelRadioButton
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
 import tech.takahana.blurperformancetester.databinding.FragmentSettingBinding
 import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
@@ -76,18 +76,21 @@ fun SettingScreen(
       style = MaterialTheme.typography.titleMedium,
     )
 
-    LabelCheckbox(
+    LabelRadioButton(
       label = {
         Text(text = stringResource(id = R.string.compose))
       },
-      checked = screenUiState is SettingScreenUiState.Display.Compose,
-      onCheckedChange = {},
+      selected = screenUiState is SettingScreenUiState.Display.Compose,
+      onClick = {},
     )
 
     when (val uiState = screenUiState) {
       SettingScreenUiState.Initialized -> Unit
       is SettingScreenUiState.Display.Compose -> {
-        ComposeSettingScreen(uiState = uiState)
+        ComposeSettingScreen(
+          uiState = uiState,
+          onSelectComposeImageLoader = settingViewModel::onSelectComposeImageLoader,
+        )
       }
     }
 
@@ -104,6 +107,7 @@ fun SettingScreen(
 @Composable
 fun ComposeSettingScreen(
   uiState: SettingScreenUiState.Display.Compose,
+  onSelectComposeImageLoader: (ComposeImageLoader) -> Unit,
 ) {
   Text(
     text = stringResource(id = R.string.image_loader),
@@ -114,13 +118,27 @@ fun ComposeSettingScreen(
     ComposeImageLoader.values().forEach { loader ->
       when (loader) {
         ComposeImageLoader.Coil -> {
-          LabelCheckbox(
+          LabelRadioButton(
             modifier = Modifier.fillMaxWidth(),
             label = {
               Text(text = stringResource(id = R.string.coil))
             },
-            checked = uiState.selectedImageLoader == loader,
-            onCheckedChange = {}
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectComposeImageLoader(ComposeImageLoader.Coil)
+            }
+          )
+        }
+        ComposeImageLoader.Glide -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.glide))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectComposeImageLoader(ComposeImageLoader.Glide)
+            }
           )
         }
       }

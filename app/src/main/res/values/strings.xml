@@ -9,4 +9,5 @@
   <string name="complete">Complete</string>
   <string name="processing">Processing</string>
   <string name="output">Output</string>
+  <string name="glide">Glide</string>
 </resources>
