@@ -19,3 +19,6 @@ material = "com.google.android.material:material:1.8.0"
 junit = "junit:junit:4.13.2"
 
 coil = "io.coil-kt:coil-compose:2.2.2"
+
+glide-compose = "com.github.bumptech.glide:compose:1.0.0-alpha.3"
+glide-transformations = "jp.wasabeef:glide-transformations:4.3.0"

@@ -1,6 +1,7 @@
 package tech.takahana.blurperformancetester.components.render
 
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,13 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import jp.wasabeef.glide.transformations.BlurTransformation
 import tech.takahana.blurperformancetester.R
 import tech.takahana.blurperformancetester.components.fragment.FakeViewModelStoreOwner
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
@@ -122,7 +130,20 @@ fun ComposeRenderScreen(
           )
         }
       }
-      ComposeImageLoader.Glide -> TODO()
+      ComposeImageLoader.Glide -> {
+        if (image != null) {
+          GlideImage(
+            image = image,
+            onChangeRenderState = {
+              renderState = it
+            },
+            onChangeImageSize = { width, height ->
+              imageWidth = width
+              imageHeight = height
+            }
+          )
+        }
+      }
       null -> Unit
     }
   }
@@ -130,6 +151,7 @@ fun ComposeRenderScreen(
 
 @Composable
 fun CoilImage(
+  modifier: Modifier = Modifier,
   image: String,
   onChangeRenderState: (RenderState) -> Unit,
   onChangeImageSize: (width: Int, height: Int) -> Unit,
@@ -150,9 +172,56 @@ fun CoilImage(
           onChangeRenderState(RenderState.Completed)
         })
       .build(),
-    modifier = Modifier.blur(radius = 16.dp),
+    modifier = modifier.blur(radius = 16.dp),
     contentDescription = stringResource(id = R.string.output),
   )
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun GlideImage(
+  modifier: Modifier = Modifier,
+  image: String,
+  onChangeRenderState: (RenderState) -> Unit,
+  onChangeImageSize: (width: Int, height: Int) -> Unit,
+) {
+  val density = LocalDensity.current
+  val radius = density.run { 16.dp.roundToPx() }
+
+  com.bumptech.glide.integration.compose.GlideImage(
+    modifier = modifier,
+    model = image,
+    contentDescription = null,
+  ) {
+    onChangeRenderState(RenderState.Processing)
+    it.transform(BlurTransformation(radius))
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            onChangeImageSize(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+            onChangeRenderState(RenderState.Completed)
+          }
+          return false
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+  }
 }
 
 @Preview(

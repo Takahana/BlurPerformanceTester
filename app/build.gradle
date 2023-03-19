@@ -56,6 +56,8 @@ dependencies {
   implementation libs.androidx.composeMaterial3
   implementation libs.androidx.lifecycleViewmodelCompose
   implementation libs.coil
+  implementation libs.glide.compose
+  implementation libs.glide.transformations
   implementation libs.androidx.profileinstaller
   testImplementation libs.junit
   androidTestImplementation libs.androidx.junit
