@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
  * for investigating your app's performance.
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleStartupBenchmark {
+class BlurBenchmark {
   @get:Rule
   val benchmarkRule = MacrobenchmarkRule()
 
