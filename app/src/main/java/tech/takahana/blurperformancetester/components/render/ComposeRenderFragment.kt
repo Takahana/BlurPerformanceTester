@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,12 +24,17 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import tech.takahana.blurperformancetester.R
+import tech.takahana.blurperformancetester.components.fragment.FakeViewModelStoreOwner
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
+import tech.takahana.blurperformancetester.components.setting.SettingScreenUiState
+import tech.takahana.blurperformancetester.components.setting.SettingViewModel
 import tech.takahana.blurperformancetester.databinding.FragmentComposeRenderBinding
-import tech.takahana.blurperformancetester.domain.domainobject.ImageSize
+import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
 import tech.takahana.blurperformancetester.domain.domainobject.RemoteImage
 
 class ComposeRenderFragment : Fragment(R.layout.fragment_compose_render) {
@@ -37,13 +42,17 @@ class ComposeRenderFragment : Fragment(R.layout.fragment_compose_render) {
   private var _binding: FragmentComposeRenderBinding? = null
   private val binding: FragmentComposeRenderBinding get() = _binding!!
 
+  private val viewModelStoreOwner: ViewModelStoreOwner get() = requireActivity()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     _binding = FragmentComposeRenderBinding.bind(view)
 
     binding.composeView.setContentOnFragment {
       MaterialTheme {
-        ComposeRenderScreen()
+        ComposeRenderScreen(
+          viewModelStoreOwner = viewModelStoreOwner,
+        )
       }
     }
   }
@@ -61,11 +70,15 @@ class ComposeRenderFragment : Fragment(R.layout.fragment_compose_render) {
 }
 
 @Composable
-fun ComposeRenderScreen() {
+fun ComposeRenderScreen(
+  viewModelStoreOwner: ViewModelStoreOwner,
+  settingViewModel: SettingViewModel = viewModel(viewModelStoreOwner)
+) {
 
-  val context = LocalContext.current
   val isPreview = LocalInspectionMode.current
   val image = if (isPreview) null else RemoteImage.W8256_H5504
+
+  val uiState by settingViewModel.uiState.collectAsState()
 
   var imageWidth by remember { mutableStateOf(0) }
   var imageHeight by remember { mutableStateOf(0) }
@@ -93,26 +106,53 @@ fun ComposeRenderScreen() {
       RenderState.Completed -> Text(text = stringResource(id = R.string.complete))
     }
 
-    AsyncImage(
-      model = ImageRequest.Builder(context)
-        .data(image)
-        .listener(
-          onStart = {
-            renderState = RenderState.Processing
-          },
-          onSuccess = { request, result ->
-            val bitmapDrawable = result.drawable as? BitmapDrawable
-            bitmapDrawable?.bitmap?.let {
-              imageWidth = it.width
-              imageHeight = it.height
+    val loader = (uiState as? SettingScreenUiState.Display.Compose)?.selectedImageLoader
+    when (loader) {
+      ComposeImageLoader.Coil -> {
+        if (image != null) {
+          CoilImage(
+            image = image,
+            onChangeRenderState = {
+              renderState = it
+            },
+            onChangeImageSize = { width, height ->
+              imageWidth = width
+              imageHeight = height
             }
-            renderState = RenderState.Completed
-          })
-        .build(),
-      modifier = Modifier.blur(radius = 16.dp),
-      contentDescription = stringResource(id = R.string.output),
-    )
+          )
+        }
+      }
+      ComposeImageLoader.Glide -> TODO()
+      null -> Unit
+    }
   }
+}
+
+@Composable
+fun CoilImage(
+  image: String,
+  onChangeRenderState: (RenderState) -> Unit,
+  onChangeImageSize: (width: Int, height: Int) -> Unit,
+) {
+  val context = LocalContext.current
+  AsyncImage(
+    model = ImageRequest.Builder(context)
+      .data(image)
+      .listener(
+        onStart = {
+          onChangeRenderState(RenderState.Processing)
+        },
+        onSuccess = { request, result ->
+          val bitmapDrawable = result.drawable as? BitmapDrawable
+          bitmapDrawable?.bitmap?.let {
+            onChangeImageSize(it.width, it.height)
+          }
+          onChangeRenderState(RenderState.Completed)
+        })
+      .build(),
+    modifier = Modifier.blur(radius = 16.dp),
+    contentDescription = stringResource(id = R.string.output),
+  )
 }
 
 @Preview(
@@ -122,6 +162,8 @@ fun ComposeRenderScreen() {
 @Composable
 fun ComposeRenderScreenPreview() {
   MaterialTheme {
-    ComposeRenderScreen()
+    ComposeRenderScreen(
+      viewModelStoreOwner = FakeViewModelStoreOwner(),
+    )
   }
 }

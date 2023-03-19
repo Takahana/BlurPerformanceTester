@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.takahana.blurperformancetester.R
 import tech.takahana.blurperformancetester.components.Navigator
 import tech.takahana.blurperformancetester.components.Navigator.Screen
 import tech.takahana.blurperformancetester.components.compose.LabelRadioButton
+import tech.takahana.blurperformancetester.components.fragment.FakeViewModelStoreOwner
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
 import tech.takahana.blurperformancetester.databinding.FragmentSettingBinding
 import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
@@ -35,6 +37,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
   private val binding: FragmentSettingBinding get() = _binding!!
 
   private val navigator: Navigator? get() = activity as? Navigator
+  private val viewModelStoreOwner: ViewModelStoreOwner get() = requireActivity()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -43,6 +46,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
     binding.composeView.setContentOnFragment {
       MaterialTheme {
         SettingScreen(
+          viewModelStoreOwner = viewModelStoreOwner,
           onClickRun = {
             navigator?.navigate(Screen.ComposeRender)
           }
@@ -59,7 +63,8 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 
 @Composable
 fun SettingScreen(
-  settingViewModel: SettingViewModel = viewModel(),
+  viewModelStoreOwner: ViewModelStoreOwner,
+  settingViewModel: SettingViewModel = viewModel(viewModelStoreOwner),
   onClickRun: () -> Unit,
 ) {
   val screenUiState by settingViewModel.uiState.collectAsState()
@@ -154,6 +159,7 @@ fun ComposeSettingScreen(
 fun SettingScreenPreview() {
   MaterialTheme {
     SettingScreen(
+      viewModelStoreOwner = FakeViewModelStoreOwner(),
       onClickRun = {},
     )
   }
