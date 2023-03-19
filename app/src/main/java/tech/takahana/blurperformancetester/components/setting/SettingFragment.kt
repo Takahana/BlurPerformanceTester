@@ -29,6 +29,7 @@ import tech.takahana.blurperformancetester.components.compose.LabelRadioButton
 import tech.takahana.blurperformancetester.components.fragment.FakeViewModelStoreOwner
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
 import tech.takahana.blurperformancetester.databinding.FragmentSettingBinding
+import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewImageLoader
 import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
@@ -82,11 +83,25 @@ fun SettingScreen(
     )
 
     LabelRadioButton(
+      modifier = Modifier.fillMaxWidth(),
       label = {
         Text(text = stringResource(id = R.string.compose))
       },
       selected = screenUiState is SettingScreenUiState.Display.Compose,
-      onClick = {},
+      onClick = {
+        settingViewModel.onSelectUIToolkit(SettingScreenUiState.Display.Compose.default)
+      },
+    )
+
+    LabelRadioButton(
+      modifier = Modifier.fillMaxWidth(),
+      label = {
+        Text(text = stringResource(id = R.string.android_view))
+      },
+      selected = screenUiState is SettingScreenUiState.Display.AndroidView,
+      onClick = {
+        settingViewModel.onSelectUIToolkit(SettingScreenUiState.Display.AndroidView.default)
+      }
     )
 
     when (val uiState = screenUiState) {
@@ -95,6 +110,12 @@ fun SettingScreen(
         ComposeSettingScreen(
           uiState = uiState,
           onSelectComposeImageLoader = settingViewModel::onSelectComposeImageLoader,
+        )
+      }
+      is SettingScreenUiState.Display.AndroidView -> {
+        AndroidViewSettingScreen(
+          uiState = uiState,
+          onSelectAndroidViewImageLoader = settingViewModel::onSelectAndroidViewImageLoader,
         )
       }
     }
@@ -114,12 +135,11 @@ fun ComposeSettingScreen(
   uiState: SettingScreenUiState.Display.Compose,
   onSelectComposeImageLoader: (ComposeImageLoader) -> Unit,
 ) {
-  Text(
-    text = stringResource(id = R.string.image_loader),
-    style = MaterialTheme.typography.titleMedium,
-  )
-
   Column {
+    Text(
+      text = stringResource(id = R.string.image_loader),
+      style = MaterialTheme.typography.titleMedium,
+    )
     ComposeImageLoader.values().forEach { loader ->
       when (loader) {
         ComposeImageLoader.Coil -> {
@@ -143,6 +163,35 @@ fun ComposeSettingScreen(
             selected = uiState.selectedImageLoader == loader,
             onClick = {
               onSelectComposeImageLoader(ComposeImageLoader.Glide)
+            }
+          )
+        }
+      }
+    }
+  }
+}
+
+@Composable
+fun AndroidViewSettingScreen(
+  uiState: SettingScreenUiState.Display.AndroidView,
+  onSelectAndroidViewImageLoader: (AndroidViewImageLoader) -> Unit,
+) {
+  Column {
+    Text(
+      text = stringResource(id = R.string.image_loader),
+      style = MaterialTheme.typography.titleMedium,
+    )
+    AndroidViewImageLoader.values().forEach { loader ->
+      when (loader) {
+        AndroidViewImageLoader.Glide -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.glide))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectAndroidViewImageLoader(AndroidViewImageLoader.Glide)
             }
           )
         }

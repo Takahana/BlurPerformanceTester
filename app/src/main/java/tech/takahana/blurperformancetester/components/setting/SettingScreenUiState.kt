@@ -1,6 +1,7 @@
 package tech.takahana.blurperformancetester.components.setting
 
 import androidx.compose.runtime.Immutable
+import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewImageLoader
 import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
 
 sealed interface SettingScreenUiState {
@@ -16,9 +17,22 @@ sealed interface SettingScreenUiState {
     ) : Display {
 
       companion object {
-        val default = Compose(
-          selectedImageLoader = ComposeImageLoader.Coil,
-        )
+        val default
+          get() = Compose(
+            selectedImageLoader = ComposeImageLoader.Coil,
+          )
+      }
+    }
+
+    data class AndroidView(
+      val selectedImageLoader: AndroidViewImageLoader,
+    ) : Display {
+
+      companion object {
+        val default
+          get() = AndroidView(
+            selectedImageLoader = AndroidViewImageLoader.Glide,
+          )
       }
     }
   }
