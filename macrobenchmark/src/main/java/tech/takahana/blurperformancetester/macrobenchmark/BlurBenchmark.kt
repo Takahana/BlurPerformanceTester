@@ -29,12 +29,14 @@ class BlurBenchmark {
   @get:Rule
   val benchmarkRule = MacrobenchmarkRule()
 
+  private val iterations = 10
+
   @Ignore
   @Test
   fun startup() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD
   ) {
     pressHome()
@@ -45,7 +47,7 @@ class BlurBenchmark {
   fun composeModifierBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -68,7 +70,7 @@ class BlurBenchmark {
   fun composeGlideBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -91,7 +93,7 @@ class BlurBenchmark {
   fun androidViewGlideBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -114,7 +116,7 @@ class BlurBenchmark {
   fun androidViewBlurryBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -137,7 +139,7 @@ class BlurBenchmark {
   fun androidViewRealtimeBlurViewBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -160,7 +162,7 @@ class BlurBenchmark {
   fun androidViewBlurKitBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
@@ -183,7 +185,7 @@ class BlurBenchmark {
   fun androidViewBlurViewBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
-    iterations = 5,
+    iterations = iterations,
     startupMode = StartupMode.COLD,
     setupBlock = {
       pressHome()
