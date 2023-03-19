@@ -1,5 +1,6 @@
 package tech.takahana.blurperformancetester.components.render
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import jp.wasabeef.blurry.Blurry
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -92,6 +94,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
   private fun loadImage(uiState: SettingScreenUiState.Display.AndroidView) {
     when (uiState.selectedImageLoader) {
       AndroidViewBlurLibrary.Glide -> loadImageWithGlide()
+      AndroidViewBlurLibrary.Blurry -> loadImageWithBlurry()
     }
   }
 
@@ -127,6 +130,53 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
             renderState.value = RenderState.Completed
           }
           return false
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(binding.imageView)
+  }
+
+  private fun loadImageWithBlurry() {
+    val image = RemoteImage.W8256_H5504
+    val density = requireContext().resources.displayMetrics.density
+    val radius = (16 * density).toInt()
+
+    fun applyBlur(bitmap: Bitmap) {
+      Blurry.with(context)
+        .radius(radius)
+        .from(bitmap)
+        .into(binding.imageView)
+
+      renderState.value = RenderState.Completed
+    }
+
+    renderState.value = RenderState.Processing
+    Glide.with(this)
+      .load(image)
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+            applyBlur(bitmapDrawable.bitmap)
+          }
+          // 描画はBlurryがする。
+          return true
         }
       })
       .diskCacheStrategy(DiskCacheStrategy.ALL)

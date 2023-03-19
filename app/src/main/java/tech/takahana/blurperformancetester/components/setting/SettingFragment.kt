@@ -205,6 +205,18 @@ fun AndroidViewSettingScreen(
             }
           )
         }
+        AndroidViewBlurLibrary.Blurry -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.blurry))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectAndroidViewImageLoader(AndroidViewBlurLibrary.Blurry)
+            }
+          )
+        }
       }
     }
   }

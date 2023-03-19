@@ -11,4 +11,5 @@
   <string name="output">Output</string>
   <string name="glide">Glide</string>
   <string name="android_view">AndroidView</string>
+  <string name="blurry">Blurry</string>
 </resources>
