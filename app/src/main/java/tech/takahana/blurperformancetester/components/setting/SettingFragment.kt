@@ -217,6 +217,18 @@ fun AndroidViewSettingScreen(
             }
           )
         }
+        AndroidViewBlurLibrary.RealtimeBlurView -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.realtime_blur_view))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectAndroidViewImageLoader(AndroidViewBlurLibrary.RealtimeBlurView)
+            }
+          )
+        }
       }
     }
   }

@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -95,6 +96,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
     when (uiState.selectedImageLoader) {
       AndroidViewBlurLibrary.Glide -> loadImageWithGlide()
       AndroidViewBlurLibrary.Blurry -> loadImageWithBlurry()
+      AndroidViewBlurLibrary.RealtimeBlurView -> loadImageWithRealtimeBlurView()
     }
   }
 
@@ -177,6 +179,42 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
           }
           // 描画はBlurryがする。
           return true
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(binding.imageView)
+  }
+
+  private fun loadImageWithRealtimeBlurView() {
+    val image = RemoteImage.W8256_H5504
+
+    renderState.value = RenderState.Processing
+    Glide.with(this)
+      .load(image)
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            binding.realtimeBlurView.isVisible = true
+            imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+            renderState.value = RenderState.Completed
+          }
+          return false
         }
       })
       .diskCacheStrategy(DiskCacheStrategy.ALL)

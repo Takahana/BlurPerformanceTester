@@ -12,4 +12,5 @@
   <string name="glide">Glide</string>
   <string name="android_view">AndroidView</string>
   <string name="blurry">Blurry</string>
+  <string name="realtime_blur_view">RealtimeBlurView</string>
 </resources>

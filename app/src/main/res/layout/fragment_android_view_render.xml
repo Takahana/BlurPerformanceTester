@@ -62,4 +62,19 @@
     tools:src="@tools:sample/backgrounds/scenic"
     />
 
+  <com.github.mmin18.widget.RealtimeBlurView
+    android:id="@+id/realtime_blur_view"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+    app:layout_constraintEnd_toEndOf="@+id/imageView"
+    app:layout_constraintStart_toStartOf="@id/imageView"
+    app:layout_constraintTop_toTopOf="@+id/imageView"
+    app:realtimeBlurRadius="16dp"
+    app:realtimeOverlayColor="#2fff"
+    tools:visibility="invisible"
+    />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
