@@ -76,5 +76,17 @@
     tools:visibility="invisible"
     />
 
+  <eightbitlab.com.blurview.BlurView
+    android:id="@+id/blurView"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:visibility="gone"
+    app:blurOverlayColor="#2fff"
+    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+    app:layout_constraintEnd_toEndOf="@+id/imageView"
+    app:layout_constraintStart_toStartOf="@id/imageView"
+    app:layout_constraintTop_toTopOf="@+id/imageView"
+    tools:visibility="invisible"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

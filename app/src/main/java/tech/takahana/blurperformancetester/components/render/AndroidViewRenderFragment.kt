@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import eightbitlab.com.blurview.RenderScriptBlur
 import io.alterac.blurkit.BlurKit
 import jp.wasabeef.blurry.Blurry
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -30,7 +31,6 @@ import tech.takahana.blurperformancetester.components.setting.SettingViewModel
 import tech.takahana.blurperformancetester.databinding.FragmentAndroidViewRenderBinding
 import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewBlurLibrary
 import tech.takahana.blurperformancetester.domain.domainobject.RemoteImage
-import kotlin.math.max
 import kotlin.math.min
 
 class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render) {
@@ -101,6 +101,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
       AndroidViewBlurLibrary.Blurry -> loadImageWithBlurry()
       AndroidViewBlurLibrary.RealtimeBlurView -> loadImageWithRealtimeBlurView()
       AndroidViewBlurLibrary.BlurKit -> loadImageWithBlurKit()
+      AndroidViewBlurLibrary.BlurView -> loadImageWithBlurView()
     }
   }
 
@@ -254,6 +255,49 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
           if (bitmapDrawable != null) {
             BlurKit.getInstance().blur(bitmapDrawable.bitmap, radius)
             imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+            renderState.value = RenderState.Completed
+          }
+          return false
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(binding.imageView)
+  }
+
+  private fun loadImageWithBlurView() {
+    val image = RemoteImage.W8256_H5504
+    val density = requireContext().resources.displayMetrics.density
+    val radius = min(16 * density, 25F)
+
+    renderState.value = RenderState.Processing
+    Glide.with(this)
+      .load(image)
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+
+            binding.blurView.isVisible = true
+            binding.blurView
+              .setupWith(binding.root, RenderScriptBlur(requireContext()))
+              .setBlurRadius(radius)
+
             renderState.value = RenderState.Completed
           }
           return false

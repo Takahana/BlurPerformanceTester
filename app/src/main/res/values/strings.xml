@@ -14,4 +14,5 @@
   <string name="blurry">Blurry</string>
   <string name="realtime_blur_view">RealtimeBlurView</string>
   <string name="blur_kit">BlurKit</string>
+  <string name="blur_view">BlurView</string>
 </resources>

@@ -5,4 +5,5 @@ enum class AndroidViewBlurLibrary {
   Blurry,
   RealtimeBlurView,
   BlurKit,
+  BlurView,
 }
