@@ -28,3 +28,5 @@ glide-transformations = "jp.wasabeef:glide-transformations:4.3.0"
 blurry = "jp.wasabeef:blurry:4.0.1"
 
 realtimeblurview = "com.github.mmin18:realtimeblurview:1.2.1"
+
+blurkit = "io.alterac.blurkit:blurkit:1.1.0"

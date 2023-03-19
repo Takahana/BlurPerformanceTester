@@ -63,6 +63,7 @@ dependencies {
   implementation libs.androidx.lifecycleRuntime
   implementation libs.blurry
   implementation libs.realtimeblurview
+  implementation libs.blurkit
   testImplementation libs.junit
   androidTestImplementation libs.androidx.junit
   androidTestImplementation libs.androidx.espresso
