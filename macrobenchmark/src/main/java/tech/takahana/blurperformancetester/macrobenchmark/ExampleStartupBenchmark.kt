@@ -56,11 +56,11 @@ class ExampleStartupBenchmark {
 
       val coilButton = device.findObject(By.text("coil"))
       coilButton.click()
-
-      val runButton = device.findObject(By.text("Run"))
-      runButton.click()
     }
   ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
     device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
   }
 
@@ -79,11 +79,11 @@ class ExampleStartupBenchmark {
 
       val glideButton = device.findObject(By.text("Glide"))
       glideButton.click()
-
-      val runButton = device.findObject(By.text("Run"))
-      runButton.click()
     }
   ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
     device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
   }
 
@@ -102,11 +102,11 @@ class ExampleStartupBenchmark {
 
       val glideButton = device.findObject(By.text("Glide"))
       glideButton.click()
-
-      val runButton = device.findObject(By.text("Run"))
-      runButton.click()
     }
   ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
     device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
   }
 }
