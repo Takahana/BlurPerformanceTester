@@ -14,7 +14,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +24,7 @@ import tech.takahana.blurperformancetester.R
 import tech.takahana.blurperformancetester.components.setting.SettingScreenUiState
 import tech.takahana.blurperformancetester.components.setting.SettingViewModel
 import tech.takahana.blurperformancetester.databinding.FragmentAndroidViewRenderBinding
-import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewImageLoader
-import tech.takahana.blurperformancetester.domain.domainobject.ImageSize
+import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewBlurLibrary
 import tech.takahana.blurperformancetester.domain.domainobject.RemoteImage
 
 class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render) {
@@ -93,7 +91,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
 
   private fun loadImage(uiState: SettingScreenUiState.Display.AndroidView) {
     when (uiState.selectedImageLoader) {
-      AndroidViewImageLoader.Glide -> loadImageWithGlide()
+      AndroidViewBlurLibrary.Glide -> loadImageWithGlide()
     }
   }
 

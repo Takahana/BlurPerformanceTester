@@ -1,6 +1,5 @@
 package tech.takahana.blurperformancetester.domain.domainobject
 
-enum class ComposeImageLoader {
-  Coil,
+enum class AndroidViewBlurLibrary {
   Glide,
 }

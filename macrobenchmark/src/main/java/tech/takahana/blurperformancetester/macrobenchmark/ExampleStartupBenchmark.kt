@@ -42,7 +42,7 @@ class ExampleStartupBenchmark {
   }
 
   @Test
-  fun composeCoilBlur() = benchmarkRule.measureRepeated(
+  fun composeModifierBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
     iterations = 5,
@@ -54,8 +54,8 @@ class ExampleStartupBenchmark {
       val composeButton = device.findObject(By.text("Compose"))
       composeButton.click()
 
-      val coilButton = device.findObject(By.text("coil"))
-      coilButton.click()
+      val modifierButton = device.findObject(By.text("Modifier"))
+      modifierButton.click()
     }
   ) {
     val runButton = device.findObject(By.text("Run"))

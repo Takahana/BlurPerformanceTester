@@ -29,8 +29,8 @@ import tech.takahana.blurperformancetester.components.compose.LabelRadioButton
 import tech.takahana.blurperformancetester.components.fragment.FakeViewModelStoreOwner
 import tech.takahana.blurperformancetester.components.fragment.setContentOnFragment
 import tech.takahana.blurperformancetester.databinding.FragmentSettingBinding
-import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewImageLoader
-import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
+import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewBlurLibrary
+import tech.takahana.blurperformancetester.domain.domainobject.ComposeBlurLibrary
 
 class SettingFragment : Fragment(R.layout.fragment_setting) {
 
@@ -143,28 +143,28 @@ fun SettingScreen(
 @Composable
 fun ComposeSettingScreen(
   uiState: SettingScreenUiState.Display.Compose,
-  onSelectComposeImageLoader: (ComposeImageLoader) -> Unit,
+  onSelectComposeImageLoader: (ComposeBlurLibrary) -> Unit,
 ) {
   Column {
     Text(
-      text = stringResource(id = R.string.image_loader),
+      text = stringResource(id = R.string.blur_library),
       style = MaterialTheme.typography.titleMedium,
     )
-    ComposeImageLoader.values().forEach { loader ->
+    ComposeBlurLibrary.values().forEach { loader ->
       when (loader) {
-        ComposeImageLoader.Coil -> {
+        ComposeBlurLibrary.Modifier -> {
           LabelRadioButton(
             modifier = Modifier.fillMaxWidth(),
             label = {
-              Text(text = stringResource(id = R.string.coil))
+              Text(text = stringResource(id = R.string.modifier))
             },
             selected = uiState.selectedImageLoader == loader,
             onClick = {
-              onSelectComposeImageLoader(ComposeImageLoader.Coil)
+              onSelectComposeImageLoader(ComposeBlurLibrary.Modifier)
             }
           )
         }
-        ComposeImageLoader.Glide -> {
+        ComposeBlurLibrary.Glide -> {
           LabelRadioButton(
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -172,7 +172,7 @@ fun ComposeSettingScreen(
             },
             selected = uiState.selectedImageLoader == loader,
             onClick = {
-              onSelectComposeImageLoader(ComposeImageLoader.Glide)
+              onSelectComposeImageLoader(ComposeBlurLibrary.Glide)
             }
           )
         }
@@ -184,16 +184,16 @@ fun ComposeSettingScreen(
 @Composable
 fun AndroidViewSettingScreen(
   uiState: SettingScreenUiState.Display.AndroidView,
-  onSelectAndroidViewImageLoader: (AndroidViewImageLoader) -> Unit,
+  onSelectAndroidViewImageLoader: (AndroidViewBlurLibrary) -> Unit,
 ) {
   Column {
     Text(
-      text = stringResource(id = R.string.image_loader),
+      text = stringResource(id = R.string.blur_library),
       style = MaterialTheme.typography.titleMedium,
     )
-    AndroidViewImageLoader.values().forEach { loader ->
+    AndroidViewBlurLibrary.values().forEach { loader ->
       when (loader) {
-        AndroidViewImageLoader.Glide -> {
+        AndroidViewBlurLibrary.Glide -> {
           LabelRadioButton(
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -201,7 +201,7 @@ fun AndroidViewSettingScreen(
             },
             selected = uiState.selectedImageLoader == loader,
             onClick = {
-              onSelectAndroidViewImageLoader(AndroidViewImageLoader.Glide)
+              onSelectAndroidViewImageLoader(AndroidViewBlurLibrary.Glide)
             }
           )
         }

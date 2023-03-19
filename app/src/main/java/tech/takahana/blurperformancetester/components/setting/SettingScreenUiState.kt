@@ -1,8 +1,8 @@
 package tech.takahana.blurperformancetester.components.setting
 
 import androidx.compose.runtime.Immutable
-import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewImageLoader
-import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
+import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewBlurLibrary
+import tech.takahana.blurperformancetester.domain.domainobject.ComposeBlurLibrary
 
 sealed interface SettingScreenUiState {
 
@@ -13,25 +13,25 @@ sealed interface SettingScreenUiState {
 
     @Immutable
     data class Compose(
-      val selectedImageLoader: ComposeImageLoader,
+      val selectedImageLoader: ComposeBlurLibrary,
     ) : Display {
 
       companion object {
         val default
           get() = Compose(
-            selectedImageLoader = ComposeImageLoader.Coil,
+            selectedImageLoader = ComposeBlurLibrary.Modifier,
           )
       }
     }
 
     data class AndroidView(
-      val selectedImageLoader: AndroidViewImageLoader,
+      val selectedImageLoader: AndroidViewBlurLibrary,
     ) : Display {
 
       companion object {
         val default
           get() = AndroidView(
-            selectedImageLoader = AndroidViewImageLoader.Glide,
+            selectedImageLoader = AndroidViewBlurLibrary.Glide,
           )
       }
     }

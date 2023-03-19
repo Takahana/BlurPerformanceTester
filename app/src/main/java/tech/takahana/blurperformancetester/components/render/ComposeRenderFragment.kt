@@ -42,7 +42,7 @@ import tech.takahana.blurperformancetester.components.fragment.setContentOnFragm
 import tech.takahana.blurperformancetester.components.setting.SettingScreenUiState
 import tech.takahana.blurperformancetester.components.setting.SettingViewModel
 import tech.takahana.blurperformancetester.databinding.FragmentComposeRenderBinding
-import tech.takahana.blurperformancetester.domain.domainobject.ComposeImageLoader
+import tech.takahana.blurperformancetester.domain.domainobject.ComposeBlurLibrary
 import tech.takahana.blurperformancetester.domain.domainobject.RemoteImage
 
 class ComposeRenderFragment : Fragment(R.layout.fragment_compose_render) {
@@ -116,7 +116,7 @@ fun ComposeRenderScreen(
 
     val loader = (uiState as? SettingScreenUiState.Display.Compose)?.selectedImageLoader
     when (loader) {
-      ComposeImageLoader.Coil -> {
+      ComposeBlurLibrary.Modifier -> {
         if (image != null) {
           CoilImage(
             image = image,
@@ -130,7 +130,7 @@ fun ComposeRenderScreen(
           )
         }
       }
-      ComposeImageLoader.Glide -> {
+      ComposeBlurLibrary.Glide -> {
         if (image != null) {
           GlideImage(
             image = image,
