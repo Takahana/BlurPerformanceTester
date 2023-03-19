@@ -42,7 +42,7 @@ class ExampleStartupBenchmark {
   }
 
   @Test
-  fun blur() = benchmarkRule.measureRepeated(
+  fun composeCoilBlur() = benchmarkRule.measureRepeated(
     packageName = "tech.takahana.blurperformancetester",
     metrics = listOf(FrameTimingMetric()),
     iterations = 5,
@@ -50,6 +50,35 @@ class ExampleStartupBenchmark {
     setupBlock = {
       pressHome()
       startActivityAndWait()
+
+      val composeButton = device.findObject(By.text("Compose"))
+      composeButton.click()
+
+      val coilButton = device.findObject(By.text("coil"))
+      coilButton.click()
+
+      val runButton = device.findObject(By.text("Run"))
+      runButton.click()
+    }
+  ) {
+    device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
+  }
+
+  @Test
+  fun composeGlideBlur() = benchmarkRule.measureRepeated(
+    packageName = "tech.takahana.blurperformancetester",
+    metrics = listOf(FrameTimingMetric()),
+    iterations = 5,
+    startupMode = StartupMode.COLD,
+    setupBlock = {
+      pressHome()
+      startActivityAndWait()
+
+      val composeButton = device.findObject(By.text("Compose"))
+      composeButton.click()
+
+      val glideButton = device.findObject(By.text("Glide"))
+      glideButton.click()
 
       val runButton = device.findObject(By.text("Run"))
       runButton.click()
