@@ -4,6 +4,7 @@ interface Navigator {
 
   enum class Screen {
     ComposeRender,
+    AndroidViewRender,
   }
 
   fun navigate(screen: Screen)

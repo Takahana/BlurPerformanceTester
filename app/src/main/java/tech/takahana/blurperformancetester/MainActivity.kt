@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tech.takahana.blurperformancetester.components.Navigator
 import tech.takahana.blurperformancetester.components.Navigator.Screen
+import tech.takahana.blurperformancetester.components.render.AndroidViewRenderFragment
 import tech.takahana.blurperformancetester.components.render.ComposeRenderFragment
 
 class MainActivity : AppCompatActivity(), Navigator {
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity(), Navigator {
   override fun navigate(screen: Screen) {
     val fragment = when (screen) {
       Screen.ComposeRender -> ComposeRenderFragment.newInstance()
+      Screen.AndroidViewRender -> AndroidViewRenderFragment.newInstance()
     }
     supportFragmentManager
       .beginTransaction()

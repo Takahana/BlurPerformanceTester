@@ -48,8 +48,8 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
       MaterialTheme {
         SettingScreen(
           viewModelStoreOwner = viewModelStoreOwner,
-          onClickRun = {
-            navigator?.navigate(Screen.ComposeRender)
+          onClickRun = { screen ->
+            navigator?.navigate(screen)
           }
         )
       }
@@ -66,7 +66,7 @@ class SettingFragment : Fragment(R.layout.fragment_setting) {
 fun SettingScreen(
   viewModelStoreOwner: ViewModelStoreOwner,
   settingViewModel: SettingViewModel = viewModel(viewModelStoreOwner),
-  onClickRun: () -> Unit,
+  onClickRun: (Screen) -> Unit,
 ) {
   val screenUiState by settingViewModel.uiState.collectAsState()
   val scrollState = rememberScrollState()
@@ -123,7 +123,17 @@ fun SettingScreen(
     Button(
       modifier = Modifier
         .fillMaxWidth(),
-      onClick = { onClickRun() }
+      onClick = {
+        when (screenUiState) {
+          is SettingScreenUiState.Display.AndroidView -> {
+            onClickRun(Screen.AndroidViewRender)
+          }
+          is SettingScreenUiState.Display.Compose -> {
+            onClickRun(Screen.ComposeRender)
+          }
+          SettingScreenUiState.Initialized -> Unit
+        }
+      }
     ) {
       Text(text = stringResource(id = R.string.run))
     }
