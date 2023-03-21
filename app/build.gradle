@@ -52,6 +52,7 @@ dependencies {
   implementation libs.material
   implementation libs.androidx.constraintlayout
   implementation libs.androidx.uiToolingPreview
+  implementation files('../renderscript-toolkit-release.aar')
   debugImplementation libs.androidx.uiTooling
   implementation libs.androidx.composeMaterial3
   implementation libs.androidx.lifecycleViewmodelCompose
