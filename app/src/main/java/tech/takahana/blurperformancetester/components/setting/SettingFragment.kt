@@ -253,6 +253,19 @@ fun AndroidViewSettingScreen(
             }
           )
         }
+
+        AndroidViewBlurLibrary.RenderScriptIntrinsicsReplacementToolKit -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.renderscript_intrinsics_replacement_toolkit))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectAndroidViewImageLoader(AndroidViewBlurLibrary.RenderScriptIntrinsicsReplacementToolKit)
+            }
+          )
+        }
       }
     }
   }

@@ -15,4 +15,5 @@
   <string name="realtime_blur_view">RealtimeBlurView</string>
   <string name="blur_kit">BlurKit</string>
   <string name="blur_view">BlurView</string>
+  <string name="renderscript_intrinsics_replacement_toolkit">RenderScriptIntrinsicsReplacementToolKit</string>
 </resources>

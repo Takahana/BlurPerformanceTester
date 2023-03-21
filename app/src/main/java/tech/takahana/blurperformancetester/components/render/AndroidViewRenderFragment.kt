@@ -31,6 +31,7 @@ import tech.takahana.blurperformancetester.components.setting.SettingViewModel
 import tech.takahana.blurperformancetester.databinding.FragmentAndroidViewRenderBinding
 import tech.takahana.blurperformancetester.domain.domainobject.AndroidViewBlurLibrary
 import tech.takahana.blurperformancetester.domain.domainobject.RemoteImage
+import tech.takahana.blurperformancetester.glide.RenderScriptToolKitBlurTransformation
 import kotlin.math.min
 
 class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render) {
@@ -102,6 +103,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
       AndroidViewBlurLibrary.RealtimeBlurView -> loadImageWithRealtimeBlurView()
       AndroidViewBlurLibrary.BlurKit -> loadImageWithBlurKit()
       AndroidViewBlurLibrary.BlurView -> loadImageWithBlurView()
+      AndroidViewBlurLibrary.RenderScriptIntrinsicsReplacementToolKit -> loadImageWithRenderScriptIntrinsicsReplacementToolKit()
     }
   }
 
@@ -298,6 +300,44 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
               .setupWith(binding.root, RenderScriptBlur(requireContext()))
               .setBlurRadius(radius)
 
+            renderState.value = RenderState.Completed
+          }
+          return false
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(binding.imageView)
+  }
+
+  private fun loadImageWithRenderScriptIntrinsicsReplacementToolKit() {
+    val image = RemoteImage.W8256_H5504
+    val density = requireContext().resources.displayMetrics.density
+    val radius = min(16 * density, 25F).toInt()
+
+    renderState.value = RenderState.Processing
+    Glide.with(this)
+      .load(image)
+      .transform(RenderScriptToolKitBlurTransformation(radius))
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
             renderState.value = RenderState.Completed
           }
           return false
