@@ -203,4 +203,50 @@ class BlurBenchmark {
 
     device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
   }
+
+  @Test
+  fun androidViewRenderScriptIntrinsicsReplacementToolKitBlur() = benchmarkRule.measureRepeated(
+    packageName = "tech.takahana.blurperformancetester",
+    metrics = listOf(FrameTimingMetric()),
+    iterations = iterations,
+    startupMode = StartupMode.COLD,
+    setupBlock = {
+      pressHome()
+      startActivityAndWait()
+
+      val composeButton = device.findObject(By.text("AndroidView"))
+      composeButton.click()
+
+      val glideButton = device.findObject(By.text("RenderScriptIntrinsicsReplacementToolKit"))
+      glideButton.click()
+    }
+  ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
+    device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
+  }
+
+  @Test
+  fun androidViewRenderEffectBlur() = benchmarkRule.measureRepeated(
+    packageName = "tech.takahana.blurperformancetester",
+    metrics = listOf(FrameTimingMetric()),
+    iterations = iterations,
+    startupMode = StartupMode.COLD,
+    setupBlock = {
+      pressHome()
+      startActivityAndWait()
+
+      val composeButton = device.findObject(By.text("AndroidView"))
+      composeButton.click()
+
+      val glideButton = device.findObject(By.text("RenderEffect"))
+      glideButton.click()
+    }
+  ) {
+    val runButton = device.findObject(By.text("Run"))
+    runButton.click()
+
+    device.wait(Until.findObject(By.text("Complete")), 30.seconds.inWholeMilliseconds)
+  }
 }
