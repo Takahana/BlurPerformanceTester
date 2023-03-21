@@ -1,8 +1,11 @@
 package tech.takahana.blurperformancetester.components.render
 
 import android.graphics.Bitmap
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -104,6 +107,7 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
       AndroidViewBlurLibrary.BlurKit -> loadImageWithBlurKit()
       AndroidViewBlurLibrary.BlurView -> loadImageWithBlurView()
       AndroidViewBlurLibrary.RenderScriptIntrinsicsReplacementToolKit -> loadImageWithRenderScriptIntrinsicsReplacementToolKit()
+      AndroidViewBlurLibrary.RenderEffect -> loadImageWithRenderEffect()
     }
   }
 
@@ -338,6 +342,50 @@ class AndroidViewRenderFragment : Fragment(R.layout.fragment_android_view_render
           val bitmapDrawable = resource as? BitmapDrawable
           if (bitmapDrawable != null) {
             imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+            renderState.value = RenderState.Completed
+          }
+          return false
+        }
+      })
+      .diskCacheStrategy(DiskCacheStrategy.ALL)
+      .into(binding.imageView)
+  }
+
+  private fun loadImageWithRenderEffect() {
+    val image = RemoteImage.W8256_H5504
+    val density = requireContext().resources.displayMetrics.density
+    val radius = 16 * density
+
+    renderState.value = RenderState.Processing
+    Glide.with(this)
+      .load(image)
+      .listener(object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any?,
+          target: Target<Drawable>?,
+          isFirstResource: Boolean
+        ): Boolean {
+          return false
+        }
+
+        override fun onResourceReady(
+          resource: Drawable?,
+          model: Any?,
+          target: Target<Drawable>?,
+          dataSource: DataSource?,
+          isFirstResource: Boolean
+        ): Boolean {
+          val bitmapDrawable = resource as? BitmapDrawable
+          if (bitmapDrawable != null) {
+            imageSize.value = Pair(bitmapDrawable.bitmap.width, bitmapDrawable.bitmap.height)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+              binding.imageView.setRenderEffect(
+                RenderEffect.createBlurEffect(radius, radius, Shader.TileMode.CLAMP)
+              )
+            }
+
             renderState.value = RenderState.Completed
           }
           return false

@@ -266,6 +266,19 @@ fun AndroidViewSettingScreen(
             }
           )
         }
+
+        AndroidViewBlurLibrary.RenderEffect -> {
+          LabelRadioButton(
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+              Text(text = stringResource(id = R.string.render_effect))
+            },
+            selected = uiState.selectedImageLoader == loader,
+            onClick = {
+              onSelectAndroidViewImageLoader(AndroidViewBlurLibrary.RenderEffect)
+            }
+          )
+        }
       }
     }
   }

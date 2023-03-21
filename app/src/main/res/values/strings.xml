@@ -16,4 +16,5 @@
   <string name="blur_kit">BlurKit</string>
   <string name="blur_view">BlurView</string>
   <string name="renderscript_intrinsics_replacement_toolkit">RenderScriptIntrinsicsReplacementToolKit</string>
+  <string name="render_effect">RenderEffect</string>
 </resources>
